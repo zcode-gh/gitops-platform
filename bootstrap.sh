@@ -53,6 +53,18 @@ check-binary-files(){
     done
 }
 
+# Function to enable direnv in this repository
+enable-direnv() {
+    if command -v direnv &> /dev/null; then
+        direnv allow .
+    else
+        echo "Error: direnv not found! Please, install it."
+        exit 1
+    fi
+}
+
+enable-direnv
+
 check-binary-files
 
 enable-pre-commit
