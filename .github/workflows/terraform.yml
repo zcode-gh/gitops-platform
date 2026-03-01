@@ -1,0 +1,48 @@
+name: Terraform
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+
+    # Run AWS services without relying on a cloud environment
+    services:
+      localstack:
+        image: localstack/localstack:latest
+        ports:
+          - 4566:4566
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.10.5
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./live
+
+      - name: Terraform Plan
+        run: terraform plan
+        working-directory: ./live
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: ./live
+
+      # Display the attributes of the newly created VPC.
+      - name: Describe VPC
+        run: aws --endpoint-url=http://localhost:4566 ec2 describe-vpcs
+        env:
+          AWS_ACCESS_KEY_ID: foo
+          AWS_SECRET_ACCESS_KEY: bar
+          AWS_DEFAULT_REGION: us-east-1
