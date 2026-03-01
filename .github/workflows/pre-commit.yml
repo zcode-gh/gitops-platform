@@ -11,4 +11,4 @@ on:
 jobs:
   pre-commit-check:
     name: Run Pre-commit Hooks
-    uses: zcode-gh/workflow-template/.github/workflows/pre-commit.yml@main
+    uses: zcode-gh/gitops-workflow/.github/workflows/pre-commit.yml@main
