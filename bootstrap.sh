@@ -12,8 +12,8 @@ else
     bash tools/check_binary_files.sh
 fi
 
-#if [[ "$SKIP" == "enable_direnv" ]]; then
-#    echo "Skipping enable-direnv.."
-#else
-#    bash tools/enable_direnv.sh
-#fi
+if [[ "$SKIP" == "enable_direnv" ]]; then
+    echo "Skipping enable-direnv.."
+else
+    bash tools/enable_direnv.sh
+fi
