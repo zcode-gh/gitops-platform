@@ -1,4 +1,4 @@
-name: Terraform
+name: Terragrunt
 
 on:
   push:
@@ -7,12 +7,11 @@ on:
   pull_request:
     branches:
       - main
-jobs:
-  terraform:
-    name: Terraform
-    runs-on: ubuntu-latest
 
-    # Run AWS services without relying on a cloud environment
+jobs:
+  terragrunt:
+    name: 'Terragrunt'
+    runs-on: ubuntu-latest
     services:
       localstack:
         image: localstack/localstack:latest
@@ -22,7 +21,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-     # Step to install necessary dependencies
+      # Step to install necessary dependencies
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -31,20 +30,20 @@ jobs:
       # Step to set up the repository
       - name: Setup Repository
         run: |
-          SKIP=enable_pre_commit ./bootstrap.sh # this script should run all functions, except the non-required enable_pre_commit function.
+          SKIP=enable_pre_commit ./bootstrap.sh
 
           # Extract the updated PATH and write it to GITHUB_ENV
           NEW_PATH=$(direnv exec . bash -c 'echo $PATH')
           echo "PATH=$NEW_PATH" >> $GITHUB_ENV
 
-      - name: Terraform Init
-        run: terraform init
-        working-directory: ./live
+      - name: Terragrunt Init
+        run: terragrunt run-all init --non-interactive
+        working-directory: ./live/prod
 
-      - name: Terraform Plan
-        run: terraform plan
-        working-directory: ./live
+      - name: Terragrunt Plan
+        run: terragrunt run-all plan --non-interactive
+        working-directory: ./live/prod
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
-        working-directory: ./live
+      - name: Terragrunt Apply
+        run: terragrunt run-all apply --non-interactive
+        working-directory: ./live/prod
