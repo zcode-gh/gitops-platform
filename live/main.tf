@@ -1,98 +1,30 @@
-resource "aws_vpc" "this" {
-  cidr_block           = var.vpc_cidr_block
-  enable_dns_support   = var.vpc_enable_dns_support
-  enable_dns_hostnames = var.vpc_enable_dns_hostnames
-  tags                 = var.vpc_tags
+locals {
+  vpc_config = jsondecode(file("${path.module}/vpc.json"))
 }
 
-resource "aws_internet_gateway" "this" {
-  vpc_id = aws_vpc.this.id
-  tags   = var.igw_tags
-}
+# Iterate over each VPC configuration in the JSON file
+module "vpc" {
+  for_each = local.vpc_config
 
-resource "aws_nat_gateway" "this" {
-  allocation_id = aws_eip.this.id
-  subnet_id     = aws_subnet.public["public-subnet-1"].id
-  tags          = var.nat_gateway_tags
-}
+  source = "../modules/vpc"
 
-resource "aws_eip" "this" {
-  associate_with_private_ip = var.eip_private_ip
-  tags                      = var.eip_tags
-}
-
-resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.this.id
-  route {
-    cidr_block = var.public_route_cidr_block
-    gateway_id = aws_internet_gateway.this.id
-  }
-  tags = var.public_route_table_tags
-}
-
-resource "aws_route_table" "private" {
-  vpc_id = aws_vpc.this.id
-  route {
-    cidr_block     = var.private_route_cidr_block
-    nat_gateway_id = aws_nat_gateway.this.id
-  }
-  tags = var.private_route_table_tags
-}
-
-resource "aws_route_table_association" "public" {
-  for_each       = aws_subnet.public
-  subnet_id      = each.value.id
-  route_table_id = aws_route_table.public.id
-}
-
-resource "aws_route_table_association" "private" {
-  for_each       = aws_subnet.private
-  subnet_id      = each.value.id
-  route_table_id = aws_route_table.private.id
-}
-
-resource "aws_subnet" "public" {
-  for_each                = tomap({ for idx, subnet in var.public_subnets : "public-subnet-${idx + 1}" => subnet })
-  vpc_id                  = aws_vpc.this.id
-  cidr_block              = each.value.cidr_block
-  availability_zone       = each.value.availability_zone
-  map_public_ip_on_launch = each.value.map_public_ip_on_launch
-  tags                    = each.value.tags
-}
-
-resource "aws_subnet" "private" {
-  for_each                = tomap({ for idx, subnet in var.private_subnets : "private-subnet-${idx + 1}" => subnet })
-  vpc_id                  = aws_vpc.this.id
-  cidr_block              = each.value.cidr_block
-  availability_zone       = each.value.availability_zone
-  map_public_ip_on_launch = each.value.map_public_ip_on_launch
-  tags                    = each.value.tags
-}
-
-resource "aws_iam_role" "this" {
-  name               = var.flow_log_role_name
-  assume_role_policy = jsonencode(var.assume_role_policy_document)
-  tags               = var.iam_role_tags
-}
-
-resource "aws_iam_policy" "this" {
-  name   = var.flow_log_policy_name
-  policy = jsonencode(var.policy_document)
-  tags   = var.iam_policy_tags
-}
-
-resource "aws_flow_log" "this" {
-  log_destination      = aws_cloudwatch_log_group.this.arn
-  traffic_type         = var.traffic_type
-  vpc_id               = aws_vpc.this.id
-  log_destination_type = var.log_destination_type
-  iam_role_arn         = aws_iam_role.this.arn
-  tags                 = var.flow_log_tags
-}
-
-#trivy:ignore:AVD-AWS-0017
-resource "aws_cloudwatch_log_group" "this" {
-  name              = "/aws/vpc/flow-logs/${aws_vpc.this.id}"
-  retention_in_days = var.cloudwatch_log_group_retention_in_days
-  tags              = var.cloudwatch_log_group_tags
+  vpc_cidr_block                         = each.value.vpc_cidr_block
+  vpc_enable_dns_support                 = each.value.vpc_enable_dns_support
+  vpc_enable_dns_hostnames               = each.value.vpc_enable_dns_hostnames
+  vpc_tags                               = each.value.vpc_tags
+  igw_tags                               = each.value.igw_tags
+  nat_gateway_tags                       = each.value.nat_gateway_tags
+  eip_private_ip                         = each.value.eip_private_ip
+  eip_tags                               = each.value.eip_tags
+  public_route_cidr_block                = each.value.public_route_cidr_block
+  public_route_table_tags                = each.value.public_route_table_tags
+  private_route_cidr_block               = each.value.private_route_cidr_block
+  private_route_table_tags               = each.value.private_route_table_tags
+  public_subnets                         = each.value.public_subnets
+  private_subnets                        = each.value.private_subnets
+  flow_log_tags                          = each.value.flow_log_tags
+  cloudwatch_log_group_tags              = each.value.cloudwatch_log_group_tags
+  flow_log_role_name                     = each.value.flow_log_role_name
+  flow_log_policy_name                   = each.value.flow_log_policy_name
+  cloudwatch_log_group_retention_in_days = each.value.cloudwatch_log_group_retention_in_days
 }
