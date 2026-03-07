@@ -81,6 +81,11 @@ resource "aws_iam_policy" "this" {
   tags   = var.iam_policy_tags
 }
 
+resource "aws_iam_role_policy_attachment" "this" {
+  role       = aws_iam_role.this.id
+  policy_arn = aws_iam_policy.this.id
+}
+
 resource "aws_flow_log" "this" {
   log_destination      = aws_cloudwatch_log_group.this.arn
   traffic_type         = var.traffic_type

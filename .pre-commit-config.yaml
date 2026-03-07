@@ -30,3 +30,10 @@ repos:
         types: [terraform]
         description: Run Trivy to scan for vulnerabilities in changed files or directories
         pass_filenames: true
+    -   id: terraform-docs
+        name: terraform-docs
+        entry: terraform-docs
+        language: system
+        types: [terraform]
+        pass_filenames: false
+        args: ["--config", "hooks/.terraform-docs.yml", "."]
