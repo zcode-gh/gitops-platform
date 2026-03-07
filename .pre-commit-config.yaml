@@ -21,3 +21,12 @@ repos:
     -   id: terraform-fmt # terraform format files
     -   id: terraform-validate # terraform validate
     -   id: tflint # static analysis of Terraform templates
+-   repo: local
+    hooks:
+    -   id: trivy-scan
+        name: Trivy Security Scan
+        entry: bash ./hooks/trivy_scan.sh
+        language: system
+        types: [terraform]
+        description: Run Trivy to scan for vulnerabilities in changed files or directories
+        pass_filenames: true
