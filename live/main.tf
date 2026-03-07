@@ -86,6 +86,7 @@ resource "aws_flow_log" "this" {
   traffic_type         = var.traffic_type
   vpc_id               = aws_vpc.this.id
   log_destination_type = var.log_destination_type
+  iam_role_arn         = aws_iam_role.this.arn
   tags                 = var.flow_log_tags
 }
 
