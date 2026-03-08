@@ -3,62 +3,62 @@
   "vpc_enable_dns_support": true,
   "vpc_enable_dns_hostnames": true,
   "vpc_tags": {
-    "Name": "vpc-bar-app"
+    "name": "vpc-${application_name}-app-${environment_alias}"
   },
   "igw_tags": {
-    "Name": "igw-bar-app"
+    "name": "igw-${application_name}-app-${environment_alias}"
   },
   "nat_gateway_tags": {
-    "Name": "nat-gateway-bar-app"
+    "name": "nat-gateway-${application_name}-app-${environment_alias}"
   },
   "eip_private_ip": "192.168.1.10",
   "eip_tags": {
-    "Name": "eip-bar-app"
+    "name": "eip-${application_name}-app-${environment_alias}"
   },
   "public_route_cidr_block": "0.0.0.0/0",
   "public_route_table_tags": {
-    "Name": "public-route-table-bar-app"
+    "name": "public-route-table-${application_name}-app-${environment_alias}"
   },
   "private_route_cidr_block": "0.0.0.0/0",
   "private_route_table_tags": {
-    "Name": "private-route-table-bar-app"
+    "name": "private-route-table-${application_name}-app-${environment_alias}"
   },
   "public_subnets": [
     {
       "cidr_block": "192.168.1.0/24",
-      "availability_zone": "us-east-1a",
+      "availability_zone": "${aws_region}a",
       "map_public_ip_on_launch": true,
       "tags": {
-        "Name": "public-subnet-bar-app-1a"
+        "name": "public-subnet-${application_name}-app-${environment_alias}-1a"
       }
     }
   ],
   "private_subnets": [
     {
       "cidr_block": "192.168.2.0/24",
-      "availability_zone": "us-east-1a",
+      "availability_zone": "${aws_region}a",
       "map_public_ip_on_launch": false,
       "tags": {
-        "Name": "private-subnet-bar-app-1a"
+        "name": "private-subnet-${application_name}-app-${environment_alias}-1a"
       }
     },
     {
       "cidr_block": "192.168.3.0/24",
-      "availability_zone": "us-east-1c",
+      "availability_zone": "${aws_region}b",
       "map_public_ip_on_launch": false,
       "tags": {
-        "Name": "private-subnet-bar-app-1c"
+        "name": "private-subnet-${application_name}-app-${environment_alias}-1c"
       }
     }
   ],
   "flow_log_tags": {
-    "Name": "flow-log-bar-app"
+    "name": "flow-log-${application_name}-app-${environment_alias}"
   },
   "cloudwatch_log_group_tags": {
-    "Name": "cloudwatch-log-group-bar-app"
+    "name": "cloudwatch-log-group-${application_name}-app-${environment_alias}"
   },
-  "flow_log_role_name": "flow-log-role-bar-app",
-  "flow_log_policy_name": "flow-log-policy-bar-app",
-  "cloudwatch_log_group_retention_in_days": 14,
+  "flow_log_role_name": "flow-log-role-${application_name}-app-${environment_alias}",
+  "flow_log_policy_name": "flow-log-policy-${application_name}-app-${environment_alias}",
+  "cloudwatch_log_group_retention_in_days": 7,
   "enable_flow_logs": true
 }
