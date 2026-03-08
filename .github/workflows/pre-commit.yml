@@ -1,13 +1,10 @@
 name: Pre-commit Hooks Check
 
 on:
-  push:
-    branches:
-      - main
-      - dev
   pull_request:
     branches:
       - main
+      - dev
 
 jobs:
   pre-commit-check:
