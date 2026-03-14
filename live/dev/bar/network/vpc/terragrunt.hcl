@@ -12,7 +12,7 @@ include "root" {
 
 # Include the AWS provider configuration.
 include "aws" {
-  path = "${get_repo_root()}/live/_env/aws_dev.hcl"
+  path = find_in_parent_folders("aws.hcl")
 
   # To reference the variables from the included config.
   expose = true
