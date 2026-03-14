@@ -82,16 +82,32 @@ RUNNER_OSTYPE=linux-gnu
 
 # ---------------------------------------------
 # TERRAGRUNT from https://github.com/gruntwork-io/terragrunt/tags
-TERRAGRUNT_VERSION=0.77.17
+# TERRAGRUNT_VERSION=0.77.17
 
 # for Linux local machine
 # curl -L "https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64" -o "${GIT_ROOT_DIR}/bin/terragrunt"
 
 # for Windows local machine
-curl -L "https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_windows_amd64.exe" -o "${GIT_ROOT_DIR}/bin/terragrunt.exe"
+# curl -L "https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_windows_amd64.exe" -o "${GIT_ROOT_DIR}/bin/terragrunt.exe"
 
 # for MacOS local machine
 # curl -L "https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_darwin_amd64" -o "${GIT_ROOT_DIR}/bin/terragrunt"
 
 # For Github runner pipeline
-curl -L "https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64" -o "${GIT_ROOT_DIR}/bin/terragrunt_${RUNNER_OSTYPE}"
+# curl -L "https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64" -o "${GIT_ROOT_DIR}/bin/terragrunt_${RUNNER_OSTYPE}"
+
+# ---------------------------------------------
+# INFRACOST from https://github.com/infracost/infracost/tags
+INFRACOST_VERSION=0.10.42
+
+# for Linux local machine
+# curl -L "https://github.com/infracost/infracost/releases/download/v${INFRACOST_VERSION}/infracost-linux-amd64.tar.gz" -o "${GIT_ROOT_DIR}/bin/infracost-${INFRACOST_VERSION}-${OSTYPE}.tar.gz"
+
+# for Windows local machine
+curl -L "https://github.com/infracost/infracost/releases/download/v${INFRACOST_VERSION}/infracost-windows-amd64.zip" -o "${GIT_ROOT_DIR}/bin/infracost-${INFRACOST_VERSION}-${OSTYPE}.zip"
+
+# for MacOS local machine
+# curl -L "https://github.com/infracost/infracost/releases/download/v${INFRACOST_VERSION}/infracost-darwin-amd64.tar.gz" -o "${GIT_ROOT_DIR}/bin/infracost-${INFRACOST_VERSION}-${OSTYPE}.tar.gz"
+
+# For Github runner pipeline
+curl -L "https://github.com/infracost/infracost/releases/download/v${INFRACOST_VERSION}/infracost-linux-amd64.tar.gz" -o "${GIT_ROOT_DIR}/bin/infracost-${INFRACOST_VERSION}-${RUNNER_OSTYPE}.tar.gz"
