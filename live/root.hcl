@@ -7,7 +7,7 @@
 
 locals {
   # Load the environment global variables.
-  infrastructure_catalog_repo = "git::https://github.com/<repository-owner>/<catalog-repository-name>.git"
+  infrastructure_catalog_repo = "git::https://github.com/zcode-gh/gitops-platform-catalog.git"
 }
 
 # Configure Terragrunt to automatically store tfstate files.
