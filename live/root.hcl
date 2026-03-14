@@ -4,6 +4,12 @@
 # tools for working with multiple modules,
 # remote state and locking: https://github.com/gruntwork-io/terragrunt
 # --------------------------------------------------------------------------
+
+locals {
+  # Load the environment global variables.
+  infrastructure_catalog_repo = "git::https://github.com/zcode-gh/gitops-platform-catalog.git"
+}
+
 # Configure Terragrunt to automatically store tfstate files.
 
 remote_state {
