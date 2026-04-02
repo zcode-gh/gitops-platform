@@ -14,14 +14,14 @@ jobs:
   terragrunt_set_environment:
     name: Set Environment
     if: github.event.pull_request.merged == true
-    uses: zcode-gh/gitops-workflow/.github/workflows/terragrunt-set-environment.yml@main
+    uses: zcode-gh/gitops-workflow/.github/workflows/terragrunt-set-environment.yml@fe53ab0bb71dbaff2a7e9da4b012371790936e4d #v1.0.0
     with:
       github_base_ref: ${{ github.base_ref }}
 
   github_list_pr_files:
     name: List Modified Files
     if: github.event.pull_request.merged == true
-    uses: zcode-gh/gitops-workflow/.github/workflows/github-list-pr-files.yml@main
+    uses: zcode-gh/gitops-workflow/.github/workflows/github-list-pr-files.yml@fe53ab0bb71dbaff2a7e9da4b012371790936e4d #v1.0.0
     with:
       github_repository: ${{ github.repository }}
       github_event_pull_request_number: ${{ github.event.pull_request.number }}
@@ -34,7 +34,7 @@ jobs:
       - terragrunt_set_environment
       - github_list_pr_files
     if: github.event.pull_request.merged == true && needs.github_list_pr_files.outputs.pr_files_count > 0
-    uses: zcode-gh/gitops-workflow/.github/workflows/terragrunt-filter-working-dir.yml@main
+    uses: zcode-gh/gitops-workflow/.github/workflows/terragrunt-filter-working-dir.yml@fe53ab0bb71dbaff2a7e9da4b012371790936e4d #v1.0.0
     with:
       working_directory_filter: ${{ needs.terragrunt_set_environment.outputs.working_dir }}
       encoded_modified_files_to_filter: ${{ needs.github_list_pr_files.outputs.encoded_modified_files }}
@@ -43,7 +43,7 @@ jobs:
     name: Terragrunt Apply
     needs: terragrunt_filter_working_dir
     if: needs.terragrunt_filter_working_dir.outputs.working_dirs_count > 0
-    uses: zcode-gh/gitops-workflow/.github/workflows/terragrunt-apply.yml@main
+    uses: zcode-gh/gitops-workflow/.github/workflows/terragrunt-apply.yml@fe53ab0bb71dbaff2a7e9da4b012371790936e4d #v1.0.0
     with:
       encoded_working_dirs: ${{ needs.terragrunt_filter_working_dir.outputs.encoded_working_dirs }}
       github_repository: ${{ github.repository }}
@@ -90,7 +90,7 @@ jobs:
       - comment_results_status
       - terragrunt_apply
     if: always()
-    uses: zcode-gh/gitops-workflow/.github/workflows/github-post-comment.yml@main
+    uses: zcode-gh/gitops-workflow/.github/workflows/github-post-comment.yml@fe53ab0bb71dbaff2a7e9da4b012371790936e4d #v1.0.0
     with:
       github_repository: ${{ github.repository }}
       github_event_pull_request_number: ${{ github.event.pull_request.number }}
@@ -106,6 +106,6 @@ jobs:
     name: Check Workflow Status
     needs: comment_results_status
     if: always()
-    uses: zcode-gh/gitops-workflow/.github/workflows/github-check-workflow-status.yml@main
+    uses: zcode-gh/gitops-workflow/.github/workflows/github-check-workflow-status.yml@fe53ab0bb71dbaff2a7e9da4b012371790936e4d #v1.0.0
     with:
       main_outcome: ${{ needs.comment_results_status.outputs.comment_results_status_outcome }}
