@@ -9,3 +9,22 @@ jobs:
   commit_lint:
     name: Run Commit Lint
     uses: zcode-gh/gitops-workflow/.github/workflows/commit-lint.yml@fe53ab0bb71dbaff2a7e9da4b012371790936e4d #v1.0.0
+  pr_diff_check:
+    uses: zcode-gh/gitops-workflow/.github/workflows/github-pr-diff-check.yml@096cc6487e0fae10ab8acd2c6ae049f861f6df64 # v1.1.0
+    with:
+      comparison_branches: dev
+      github_base_ref: ${{ github.base_ref }}
+      github_head_ref: ${{ github.head_ref }}
+
+  github_post_comment:
+    name: Github Post Comment
+    if: always()
+    needs: pr_diff_check
+    uses: zcode-gh/gitops-workflow/.github/workflows/github-post-comment.yml@096cc6487e0fae10ab8acd2c6ae049f861f6df64 # v1.1.0
+    with:
+      github_repository: ${{ github.repository }}
+      github_event_pull_request_number: ${{ github.event.pull_request.number }}
+      encoded_comment_title: ${{ needs.pr_diff_check.outputs.encoded_comment_title }}
+      encoded_comment_outputs: ${{ needs.pr_diff_check.outputs.encoded_comment_outputs }}
+    secrets:
+      github_secret_token: ${{ secrets.GITHUB_TOKEN }}
