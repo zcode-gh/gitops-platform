@@ -8,7 +8,7 @@ on:
 jobs:
   commit_lint:
     name: Run Commit Lint
-    uses: zcode-gh/gitops-workflow/.github/workflows/commit-lint.yml@fe53ab0bb71dbaff2a7e9da4b012371790936e4d #v1.0.0
+    uses: zcode-gh/gitops-workflow/.github/workflows/commit-lint.yml@a99c98a0840b9d271ef5a8156ea6b3b77a30a754 # v1.2.0
   pr_diff_check:
     uses: zcode-gh/gitops-workflow/.github/workflows/github-pr-diff-check.yml@096cc6487e0fae10ab8acd2c6ae049f861f6df64 # v1.1.0
     with:
